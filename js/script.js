@@ -1,4 +1,24 @@
-// DODO -- Knockout MVVM integrieren
+/* PROJECT GOALS
+
+1.  Write code required to add a full-screen map to your page using the Google Maps API.
+      — DONE
+2.  Write code required to add map markers identifying a number of locations your are interested in within this neighborhood.
+      — DONE
+3.  Implement the search bar functionality to search your map markers.
+      - try it with jQuery autocomplete
+4.  Implement a list view of the identified locations.
+      - 
+5.  Add additional functionality using third-party APIs when a map marker, search result, or list view entry is clicked 
+    (ex. Yelp reviews, Wikipedia, StreetView/Flickr images, etc). If you need a refresher on making AJAX requests to third-party 
+    servers, check out our Intro to AJAX course.
+
+
+
+/* TODOs
+- Knockout MVVM integrieren
+*/
+
+
 
 var myLocations = ko.observableArray([
     { name: "Name1", latlng: new google.maps.LatLng(47.391404, 8.515527) },
