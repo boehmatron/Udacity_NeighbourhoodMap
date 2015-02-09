@@ -62,5 +62,8 @@ function attachInfoWindow(marker, num) {
   });
 }
 
+var test = function(){
+  console.log("test");
+}
 
 console.log( myLocations().length );
