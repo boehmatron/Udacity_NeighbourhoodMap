@@ -21,6 +21,21 @@ body {
  	border: 1px #000 Solid;
  	padding: 5px; 
  }
+
+ #markerList {
+ 	z-index: 99;
+ 	position: absolute;
+ 	margin: 20px 0px 0px 20px;
+ 	background-color: #fff;
+ 	padding: 5px;
+ }
+
+ #markerList li{
+ 	list-style-type: none;
+ 	color: green;
+ 	padding: 10px
+
+ }
  
  #map { 
  	width: 100%; 

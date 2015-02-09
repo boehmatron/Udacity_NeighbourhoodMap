@@ -18,14 +18,6 @@
 - Knockout MVVM integrieren
 */
 
-
-
-var myLocations = ko.observableArray([
-    { name: "Name1", latlng: new google.maps.LatLng(47.391404, 8.515527) },
-    { name: "Name2", latlng: new google.maps.LatLng(47.377805, 8.516814) },
-    { name: "Name3", latlng: new google.maps.LatLng(47.382579, 8.505524) }
-]);
-
 var mapOptions = {
     center: new google.maps.LatLng(47.391404, 8.515527),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -33,11 +25,16 @@ var mapOptions = {
 };     
 
 var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
 var input = document.getElementById('searchTextField');
-
 var autocomplete = new google.maps.places.Autocomplete(input);
 
+var myLocations = ko.observableArray([
+    { name: "Name1", latlng: new google.maps.LatLng(47.391404, 8.515527) },
+    { name: "Name2", latlng: new google.maps.LatLng(47.377805, 8.516814) },
+    { name: "Name3", latlng: new google.maps.LatLng(47.382579, 8.505524) }
+]);
+
+ko.applyBindings(myLocations);
 
 var initialize = function(){
 
@@ -51,6 +48,8 @@ var initialize = function(){
   }
 }
 
+google.maps.event.addDomListener(window, 'load', initialize);
+
 // The five markers show a secret message when clicked but that message is not within the marker's instance data
 function attachInfoWindow(marker, num) {
 
@@ -63,7 +62,5 @@ function attachInfoWindow(marker, num) {
   });
 }
 
-
-google.maps.event.addDomListener(window, 'load', initialize);
 
 console.log( myLocations().length );

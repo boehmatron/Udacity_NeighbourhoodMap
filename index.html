@@ -9,6 +9,11 @@
 	
 	<div id="container">
     	<input id="searchTextField" type="text" size="50">
+
+        <ul id="markerList" data-bind="foreach: myLocations">
+            <li data-bind="text: name"></li>
+        </ul>
+
     	<div id="map"></div>
 	</div>
 
