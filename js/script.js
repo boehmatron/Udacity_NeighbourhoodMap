@@ -62,5 +62,8 @@ function attachInfoWindow(marker, num) {
   });
 }
 
+function centerMap(){
+  console.log("click");
+}
 
 console.log( myLocations().length );
