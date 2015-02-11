@@ -42,8 +42,7 @@ ko.applyBindings(myLocations);
 
 
 
-// VIEW
-//----------------
+
 // Define google map
 var mapOptions = {
   center: new google.maps.LatLng(47.391404, 8.515527),
@@ -58,13 +57,14 @@ var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 //----------------
 
 // This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
-function AppViewModel() {
-    this.firstName = "Bert";
-    this.lastName = "Bertington";
+function ViewModel() {
+
+    this.currentPOI = ko.observable(0);
+
 }
 
 // Activates knockout.js
-ko.applyBindings(new AppViewModel());
+ko.applyBindings( new ViewModel() );
 
 
 var initialize = function(){
