@@ -44,6 +44,7 @@ ko.applyBindings(myLocations);
 
 // VIEW
 //----------------
+// Define google map
 var mapOptions = {
   center: new google.maps.LatLng(47.391404, 8.515527),
   mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -51,14 +52,16 @@ var mapOptions = {
 };     
 
 var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-var input = document.getElementById('searchTextField');
-var autocomplete = new google.maps.places.Autocomplete(input);
+
 
 // VIEW MODEL
 //----------------
 
 
 var initialize = function(){
+
+  var input = document.getElementById('searchTextField');
+  var autocomplete = new google.maps.places.Autocomplete(input);
 
   var currentMarker = ko.observable( myLocations()[0] );
 
@@ -89,12 +92,10 @@ function attachInfoWindow(marker, num) {
   });
 }
 
-<<<<<<< HEAD
+
 function centerMap(){
   console.log("click");
-=======
-var test = function(){
-  console.log("test");
->>>>>>> FETCH_HEAD
+
+
 }
 
