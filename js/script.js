@@ -49,6 +49,12 @@ var myLocations = ko.observableArray([
 
 ko.applyBindings(myLocations);
 
+/////////////////////////
+
+
+
+/////////////////////////
+
 
 
 // VIEW MODEL
@@ -62,7 +68,6 @@ function ViewModel() {
   this.input = ko.observable( document.getElementById('searchTextField') );
   // define google map
 
-  
   //populate locations as markers
 
   //populate locations as hmtl list elements
@@ -71,12 +76,6 @@ function ViewModel() {
   this.showInfoWindow = function(){
 
   }
-
-
-
-
-
-
 
 }
 
