@@ -49,11 +49,28 @@ var myLocations = ko.observableArray([
 
 ko.applyBindings(myLocations);
 
-/////////////////////////
+// GOOGLE MAP
+//----------------
+// -> TBD var startingPoint = new google.maps.LatLng(47.391404, 8.515527);
+var mapOptions = {
+    center: { lat: 34.060609, lng: -118.445051},
+    zoom: 14
+};
+
+var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
 
 
-/////////////////////////
+
+function loadMarkers(location) { //, index, array
+    var myLatlng = new google.maps.LatLng(location.latlng);
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: location.name
+    });
+    loadInfoWindow(location, marker);
+}
 
 
 
@@ -66,7 +83,6 @@ function ViewModel() {
   this.currentPOI = ko.observable(0);
   //input vom textfield
   this.input = ko.observable( document.getElementById('searchTextField') );
-  // define google map
 
   //populate locations as markers
 
@@ -79,7 +95,6 @@ function ViewModel() {
 
 }
 
-// Activates knockout.js
 ko.applyBindings( new ViewModel() );
 
 
