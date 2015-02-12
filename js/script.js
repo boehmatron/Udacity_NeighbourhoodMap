@@ -15,7 +15,16 @@
 
 
 /* TODOs
-- Knockout MVVM integrieren
+- Model mit Locations definieren
+- View Model aufsetzen
+- html Liste erstellen mit den Locations aus dem Model
+- Locations aus der Liste Klickbar machen udn unterschiedliche Nachricht anzeigen
+- google maps anzeigen
+- location marker aus den model auf der karte anzeigen
+- show window auf pins implementieren
+- show window auf click bei listen elementen implementierne
+- suchergebnisse aus dem textfeld nach markern filtern
+
 */
 
 // MODEL
@@ -42,24 +51,32 @@ ko.applyBindings(myLocations);
 
 
 
-
-// Define google map
-var mapOptions = {
-  center: new google.maps.LatLng(47.391404, 8.515527),
-  mapTypeId: google.maps.MapTypeId.ROADMAP,
-  zoom: 14
-};     
-
-var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-
 // VIEW MODEL
 //----------------
-
-// This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
 function ViewModel() {
+  var self = this;
 
-    this.currentPOI = ko.observable(0);
+  //aktuell geklickter Pin
+  this.currentPOI = ko.observable(0);
+  //input vom textfield
+  this.input = ko.observable( document.getElementById('searchTextField') );
+  // define google map
+
+  
+  //populate locations as markers
+
+  //populate locations as hmtl list elements
+
+  //show infoWindow
+  this.showInfoWindow = function(){
+
+  }
+
+
+
+
+
+
 
 }
 
@@ -67,44 +84,5 @@ function ViewModel() {
 ko.applyBindings( new ViewModel() );
 
 
-var initialize = function(){
 
-  var input = document.getElementById('searchTextField');
-  var autocomplete = new google.maps.places.Autocomplete(input);
-
-  var currentMarker = ko.observable( myLocations()[0] );
-
-  for(var i=0; i<myLocations().length; i++){
-      var marker = new google.maps.Marker({
-        position: myLocations()[i].latlng,
-        map: map
-      });
-
-      attachInfoWindow(marker, i);
-  }
-  
-
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
-
-// The five markers show a secret message when clicked but that message is not within the marker's instance data
-function attachInfoWindow(marker, num) {
-
-  var infowindow = new google.maps.InfoWindow({
-    content: myLocations()[num].name
-  });
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.open(marker.get('map'), marker);
-
-  });
-}
-
-
-function centerMap(){
-  console.log("click");
-
-
-}
 
