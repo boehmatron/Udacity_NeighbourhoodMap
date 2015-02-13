@@ -84,6 +84,7 @@ for (i = 0; i < myLocations().length; i++) {
       var address = street + "," + city;
       var streetviewURL = "http://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + address + "";
 
+// Wikipedia search
       var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + ' ' + city +'&format=json&callback=wikiCallback'; 
 
       $.ajax({
@@ -100,6 +101,24 @@ for (i = 0; i < myLocations().length; i++) {
           }
       }
     });
+
+// Yelp search
+/*
+  var yelpConsumerKey = "-7YvC2J88bRwvoQ9xFPw7Q";
+  var yelpConsumerSecret = "C8lVVq_73NHu5HUyCXWeZ_iZx8Q";
+  var yelpToken = "p-YWs-DhLU3-sWFzKBhTkEpUxfWpy0j3";
+  var yelpSecret = "BgjRpzZ4NJYfmLfTukCwPfvVok0";
+
+  var yelpURL = "http://api.yelp.com/v2/search?term=german+food&location=Hayes&cll=37.77493,-122.419415";
+  console.log(yelpURL);
+  $.ajay({
+    url: yelpURL,
+    dataType: "jsonp",
+    success : function(respone){
+
+    }
+  });
+*/
 
       var infoWindowContent = "<div class='popup'><h1>" + myLocations()[i].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
       var infoWindow = new google.maps.InfoWindow({
