@@ -10,9 +10,9 @@
 	<div id="container">
     	<input id="searchTextField" type="text" size="50">
 
-        <ul id="markerList" data-bind="foreach: myLocations">
+        <ul id="markerList" data-bind="foreach: {data: myLocations, as: 'location'}">
 
-            <li data-bind="text: name, click: showListElement"></li>
+            <li data-bind="text: name, event: {click: showListElement.bind(marker,event)}"></li>
 
         </ul>
 
