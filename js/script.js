@@ -88,6 +88,22 @@ for (i = 0; i < myLocations().length; i++) {
 
 showListElement = function(event, marker){
     console.log(event, marker, map);
+    console.log(marker.name);
+
+    var name = marker.name;
+
+    marker = new google.maps.Marker({
+    position: marker.latlng,
+    map: map
+  });
+
+      // var infoWindowContent = "<div class='popup'><h1>" + marker.name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
+	var infoWindowContent= "<h1>" + name + "</h1>";
+      var infoWindow = new google.maps.InfoWindow({
+        content: infoWindowContent
+      }); 
+
+      infoWindow.open(map, marker);
 
   }
 
