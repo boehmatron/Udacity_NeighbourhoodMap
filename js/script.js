@@ -1,5 +1,6 @@
 // MODEL
 //----------------
+/* Let's add a marker object so we can save our markers when they get initially created */
 var myLocations = ko.observableArray([
   {
     name: "Hiltl",
@@ -7,23 +8,26 @@ var myLocations = ko.observableArray([
     zip: "8001",
     city: "Zürich",
     latlng: new google.maps.LatLng(47.373399, 8.536846),
-    showItem: function(event, marker){
-      infoWindow.open(map, marker);
-    } },
-  { 
+    marker: null
+  },
+  {
     name: "Yooji's",
     street: "Bahnhofstr. 102",
     zip: "8001",
-    city: "Zürich", 
-    latlng: new google.maps.LatLng(47.376298, 8.539732) },
-  { 
+    city: "Zürich",
+    latlng: new google.maps.LatLng(47.376298, 8.539732),
+    marker: null
+  },
+  {
     name: "Rio",
     street: "Gessnerallee 17",
-    zip: "8001",    
-    city: "Zürich", 
-    latlng: new google.maps.LatLng(47.376233, 8.535823) }
-]);
-
+    zip: "8001",
+    city: "Zürich",
+    latlng: new google.maps.LatLng(47.376233, 8.535823),
+    marker: null
+  }
+  ] // End array
+);
 
 
 // GOOGLE MAP
@@ -39,33 +43,42 @@ var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 var input = document.getElementById('searchTextField');
 var autocomplete = new google.maps.places.Autocomplete(input);
 
+/* Let's create one InfoWindow and simply use that one*/
+var INFO_WINDOW = new google.maps.InfoWindow();
 
-// draw marker on map and attach infoWindow with corresponding information 
+
+// draw marker on map and attach infoWindow with corresponding information
 // from myLocations() Array
 var marker, i;
 
-for (i = 0; i < myLocations().length; i++) {  
+for (i = 0; i < myLocations().length; i++) {
+
   marker = new google.maps.Marker({
     position: myLocations()[i].latlng,
     map: map
   });
 
-  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+  /* Save this marker for later use */
+  myLocations()[i].marker = marker;
+
+  /* Recommend you create a new function that gets the new wikipedia article */
+  /* Changed i to something more descriptive and meaningful such as location_index */
+  google.maps.event.addListener(marker, 'click', (function(marker, location_index) {
     return function() {
-      var name = myLocations()[i].name;
-      var street = myLocations()[i].street;
-      var city = myLocations()[i].city;
+      var name = myLocations()[location_index].name;
+      var street = myLocations()[location_index].street;
+      var city = myLocations()[location_index].city;
       var address = street + "," + city;
       var streetviewURL = "http://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + address + "";
 
 // Wikipedia search
-      var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + ' ' + city +'&format=json&callback=wikiCallback'; 
+      var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + ' ' + city +'&format=json&callback=wikiCallback';
 
       $.ajax({
         url: wikiURL,
         dataType: "jsonp",
-        success: function(response){
-            
+        success: function(response) {
+
           var articleList = response[1];
 
           for (var i = 0; i < 1; i++){
@@ -73,39 +86,41 @@ for (i = 0; i < myLocations().length; i++) {
             var url = 'http://en.wikipedia.org/wiki/' + articleStr;
             $('.wikiLinks').append('<li><a href="' + url + '">' + articleStr + '</a></li>');
           }
-      }
-    });
 
-      var infoWindowContent = "<div class='popup'><h1>" + myLocations()[i].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
-      var infoWindow = new google.maps.InfoWindow({
+          var infoWindowContent = "<div class='popup'><h1>" + myLocations()[location_index].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
+
+          INFO_WINDOW.setContent(infoWindowContent);
+          INFO_WINDOW.open(map, marker);
+        },
+        error: function() {
+          /* Make sure we let the user know if there is something wrong with getting data from Wikipedia */
+        }
+      });
+
+      /* Remember that we need to wait for the Wikipedia article to load so we can then create our Info Window 
+         Therefore we need to create the content string once everything has been loaded under the success function in our AJAX call
+      */
+      // var infoWindowContent = "<div class='popup'><h1>" + myLocations()[i].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
+
+
+      /* Let's use one InfoWindow */
+      /*var infoWindow = new google.maps.InfoWindow({
         content: infoWindowContent
-      }); 
+      });
+      */
 
-      infoWindow.open(map, marker);
-    }
+      /*infoWindow.open(map, marker);*/
+    };
   })(marker, i));
 }
 
-showListElement = function(event, marker){
-    console.log(event, marker, map);
-    console.log(marker.name);
+showListElement = function(event, location){
 
-    var name = marker.name;
+  console.log(location.name);
 
-    marker = new google.maps.Marker({
-    position: marker.latlng,
-    map: map
-  });
+  google.maps.event.trigger(location.marker,'click');
 
-      // var infoWindowContent = "<div class='popup'><h1>" + marker.name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
-	var infoWindowContent= "<h1>" + name + "</h1>";
-      var infoWindow = new google.maps.InfoWindow({
-        content: infoWindowContent
-      }); 
-
-      infoWindow.open(map, marker);
-
-  }
+};
 
 // VIEW MODEL
 //----------------
