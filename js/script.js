@@ -1,6 +1,5 @@
 // MODEL
 //----------------
-/* Let's add a marker object so we can save our markers when they get initially created */
 var myLocations = ko.observableArray([
   {
     name: "Hiltl",
@@ -42,8 +41,9 @@ var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
 var input = document.getElementById('searchTextField');
 var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', map);
 
-/* Let's create one InfoWindow and simply use that one*/
+
 var INFO_WINDOW = new google.maps.InfoWindow();
 
 
@@ -65,6 +65,9 @@ for (i = 0; i < myLocations().length; i++) {
   /* Changed i to something more descriptive and meaningful such as location_index */
   google.maps.event.addListener(marker, 'click', (function(marker, location_index) {
     return function() {
+
+      bounceMarker(marker);
+
       var name = myLocations()[location_index].name;
       var street = myLocations()[location_index].street;
       var city = myLocations()[location_index].city;
@@ -100,19 +103,26 @@ for (i = 0; i < myLocations().length; i++) {
       /* Remember that we need to wait for the Wikipedia article to load so we can then create our Info Window 
          Therefore we need to create the content string once everything has been loaded under the success function in our AJAX call
       */
-      // var infoWindowContent = "<div class='popup'><h1>" + myLocations()[i].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
 
-
-      /* Let's use one InfoWindow */
-      /*var infoWindow = new google.maps.InfoWindow({
-        content: infoWindowContent
-      });
-      */
-
-      /*infoWindow.open(map, marker);*/
     };
   })(marker, i));
 }
+
+var initialize = function(){
+
+}
+
+// Animation for selected marker
+function bounceMarker(marker) {
+  if (marker.getAnimation() != null) {
+        marker.setAnimation(null);
+    } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
 
 showListElement = function(event, location){
 
