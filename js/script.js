@@ -96,6 +96,7 @@ for (i = 0; i < myLocations().length; i++) {
           INFO_WINDOW.open(map, marker);
         },
         error: function() {
+          console.log("error");
           /* Make sure we let the user know if there is something wrong with getting data from Wikipedia */
         }
       });
@@ -106,6 +107,7 @@ for (i = 0; i < myLocations().length; i++) {
 
     };
   })(marker, i));
+
 }
 
 var initialize = function(){
@@ -118,11 +120,11 @@ function bounceMarker(marker) {
         marker.setAnimation(null);
     } else {
         marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){ marker.setAnimation(null); }, 750);
     }
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
-
 
 showListElement = function(event, location){
 
