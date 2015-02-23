@@ -127,11 +127,7 @@ function bounceMarker(marker) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 showListElement = function(event, location){
-
-  console.log(location.name);
-
   google.maps.event.trigger(location.marker,'click');
-
 };
 
 // VIEW MODEL
