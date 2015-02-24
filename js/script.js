@@ -77,6 +77,11 @@ for (i = 0; i < myLocations().length; i++) {
 // Wikipedia search
       var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + ' ' + city +'&format=json&callback=wikiCallback';
 
+        //error handling for wiki media query
+        var wikiRequestTimeout = setTimeout(function() {
+            document.querySelector('#wiki-errors').text('Could not get wiki search results for ' + place.name);
+        }, 8000);
+        
       $.ajax({
         url: wikiURL,
         dataType: "jsonp",
@@ -101,6 +106,7 @@ for (i = 0; i < myLocations().length; i++) {
         }
       });
 
+      clearTimeout(wikiRequestTimeout);
       /* Remember that we need to wait for the Wikipedia article to load so we can then create our Info Window 
          Therefore we need to create the content string once everything has been loaded under the success function in our AJAX call
       */
@@ -120,7 +126,9 @@ function bounceMarker(marker) {
         marker.setAnimation(null);
     } else {
         marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function(){ marker.setAnimation(null); }, 750);
+        setTimeout(function(){ 
+          marker.setAnimation(null); 
+        }, 750);
     }
 }
 
