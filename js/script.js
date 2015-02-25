@@ -24,32 +24,46 @@ var myLocations = ko.observableArray([
     city: "Zürich",
     latlng: new google.maps.LatLng(47.376233, 8.535823),
     marker: null
+  },
+  {
+    name: "Les Halles",
+    street: "Pfingstweidstrasse 6",
+    zip: "8005",
+    city: "Zürich",
+    latlng: new google.maps.LatLng(47.387894, 8.518514),
+    marker: null
+  },
+  {
+    name: "Sphères",
+    street: "Hardturmstrasse 66",
+    zip: "8005",
+    city: "Zürich",
+    latlng: new google.maps.LatLng(47.391919, 8.518687),
+    marker: null
+  },
+  {
+    name: "Rosso",
+    street: "Geroldstrasse 31",
+    zip: "8005",
+    city: "Zürich",
+    latlng: new google.maps.LatLng(47.385513, 8.518312),
+    marker: null
   }
-  ] // End array
+  ]
 );
 
 
 // GOOGLE MAP
 //----------------
-var startingPoint = new google.maps.LatLng(47.368620, 8.538775);
-var mapOptions = {
-    center: startingPoint,
-    zoom: 14
-};
-
+var mapOptions = {};
 var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
+var bounds = new google.maps.LatLngBounds();
 var input = document.getElementById('searchTextField');
 var autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.bindTo('bounds', map);
-
-
 var INFO_WINDOW = new google.maps.InfoWindow();
-
-
+var marker, i;
 // draw marker on map and attach infoWindow with corresponding information
 // from myLocations() Array
-var marker, i;
 
 for (i = 0; i < myLocations().length; i++) {
 
@@ -58,67 +72,47 @@ for (i = 0; i < myLocations().length; i++) {
     map: map
   });
 
-  /* Save this marker for later use */
+  //extend the bounds to include each marker's position
+  bounds.extend(marker.position);
+
+  // Save this marker for later use 
   myLocations()[i].marker = marker;
 
-  /* Recommend you create a new function that gets the new wikipedia article */
-  /* Changed i to something more descriptive and meaningful such as location_index */
-  google.maps.event.addListener(marker, 'click', (function(marker, location_index) {
+  google.maps.event.addListener(marker, 'click', (function(marker, i) {
     return function() {
 
-      bounceMarker(marker);
-
-      var name = myLocations()[location_index].name;
-      var street = myLocations()[location_index].street;
-      var city = myLocations()[location_index].city;
+      var name = myLocations()[i].name;
+      var street = myLocations()[i].street;
+      var city = myLocations()[i].city;
       var address = street + "," + city;
       var streetviewURL = "http://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + address + "";
+      var infoWindowContent = "<div class='popup'><h1>" + myLocations()[i].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
 
-// Wikipedia search
-      var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + ' ' + city +'&format=json&callback=wikiCallback';
+      // open infoWindow
+      INFO_WINDOW.setContent(infoWindowContent);
+      INFO_WINDOW.open(map, marker);
 
-        //error handling for wiki media query
-        var wikiRequestTimeout = setTimeout(function() {
-            document.querySelector('#wiki-errors').text('Could not get wiki search results for ' + place.name);
-        }, 8000);
-        
-      $.ajax({
-        url: wikiURL,
-        dataType: "jsonp",
-        success: function(response) {
-
-          var articleList = response[1];
-
-          for (var i = 0; i < 1; i++){
-            articleStr = articleList[i];
-            var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-            $('.wikiLinks').append('<li><a href="' + url + '">' + articleStr + '</a></li>');
-          }
-
-          var infoWindowContent = "<div class='popup'><h1>" + myLocations()[location_index].name + "</h1><img src='" + streetviewURL + "'><div class='wikiLinks'></div></div>";
-
-          INFO_WINDOW.setContent(infoWindowContent);
-          INFO_WINDOW.open(map, marker);
-        },
-        error: function() {
-          console.log("error");
-          /* Make sure we let the user know if there is something wrong with getting data from Wikipedia */
-        }
-      });
-
-      clearTimeout(wikiRequestTimeout);
-      /* Remember that we need to wait for the Wikipedia article to load so we can then create our Info Window 
-         Therefore we need to create the content string once everything has been loaded under the success function in our AJAX call
-      */
+      // add animation
+      bounceMarker(marker);
+      // center map to marker
+      map.setCenter(marker.getPosition());        
 
     };
   })(marker, i));
 
 }
 
+//fit the map to bounds
+map.fitBounds(bounds);
+autocomplete.bindTo('bounds', map);
+
+
+
 var initialize = function(){
 
 }
+
+google.maps.event.addDomListener(window, 'load', initialize);
 
 // Animation for selected marker
 function bounceMarker(marker) {
@@ -132,8 +126,6 @@ function bounceMarker(marker) {
     }
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
-
 showListElement = function(event, location){
   google.maps.event.trigger(location.marker,'click');
 };
@@ -141,7 +133,6 @@ showListElement = function(event, location){
 // VIEW MODEL
 //----------------
 function ViewModel() {
-  var self = this;
   var inputName = ko.observable(input);
 }
 
