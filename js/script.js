@@ -52,6 +52,7 @@ var myLocations = ko.observableArray([
   ]
 );
 
+var initialize = function(){
 
 // GOOGLE MAP
 //----------------
@@ -106,10 +107,6 @@ for (i = 0; i < myLocations().length; i++) {
 map.fitBounds(bounds);
 autocomplete.bindTo('bounds', map);
 
-
-
-var initialize = function(){
-
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -133,7 +130,7 @@ showListElement = function(event, location){
 // VIEW MODEL
 //----------------
 function ViewModel() {
-  var inputName = ko.observable(input);
+
 }
 
 ko.applyBindings( new ViewModel() );
