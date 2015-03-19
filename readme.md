@@ -30,6 +30,9 @@ You can also filter the set of places in the list dynamically.
 ### Google Maps Geocoding
 * https://developers.google.com/maps/documentation/geocoding/?hl=de
 
+### Foursquare API
+* https://developer.foursquare.com/docs/venues/explore
+
 ### KO Utils (filter) -
 * http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
 
